@@ -1,37 +1,38 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
+  const handleLogin = async (e) => {
+    e.preventDefault(); // Fixed typo
+    setError('');
+    setLoading(true);
     try {
-      const res = await axios.post('http://localhost:8000/api/token/', {
-        email,
-        password,
-      });
-
-      // Store the token
-      localStorage.setItem('access_token', res.data.access);
-      localStorage.setItem('refresh_token', res.data.refresh);
-
-      console.log('Login successful!');
-      // Redirect or notify user here
-
-    } catch (error) {
-      console.error('Login failed:', error.response?.data || error.message);
+      const success = await login(email, password);
+      if (success) {
+        navigate("/");
+      } else {
+        setError("Invalid email or password.");
+      }
+    } catch (err) {
+      setError("An error occurred. Please try again.");
     }
+    setLoading(false);
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-sky-100 to-blue-200 px-4">
       <motion.form
-        onSubmit={handleSubmit}
+        onSubmit={handleLogin}
         initial={{ opacity: 0, scale: 0.9, y: -50 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -41,6 +42,12 @@ const Login = () => {
           <h2 className="text-3xl font-extrabold text-blue-600">SkillSync</h2>
           <p className="text-gray-500 text-sm">Login to your account</p>
         </div>
+
+        {error && (
+          <div className="mb-4 text-red-600 text-center font-medium">
+            {error}
+          </div>
+        )}
 
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
@@ -78,9 +85,10 @@ const Login = () => {
         <motion.button
           whileTap={{ scale: 0.95 }}
           type="submit"
+          disabled={loading}
           className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-xl transition duration-200"
         >
-          Log In
+          {loading ? 'Logging in...' : 'Log In'}
         </motion.button>
       </motion.form>
     </div>

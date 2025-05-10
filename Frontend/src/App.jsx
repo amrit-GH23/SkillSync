@@ -6,6 +6,7 @@ import {
 import Login from './assets/Pages/Login';
 import Signup from './assets/Pages/Signup';
 import ProfileCreate from './assets/Pages/ProfileCreate';
+import Home from './assets/Pages/Home';
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
         <Route path="/login" element={<Login/>} />
         <Route path="/signup" element={<Signup/>} />
         <Route path="/createProfile" element={<ProfileCreate/>} />
-        
+        <Route path="/" element={<Home/>} />
       </Routes>
     </Router>
   );
