@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import CreatableSelect from 'react-select/creatable';
 import makeAnimated from 'react-select/animated';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const animatedComponents = makeAnimated();
 
@@ -15,8 +17,16 @@ const ProfileCreate = () => {
   const [bio, setBio] = useState('');
   const [skillHave, setSkillHave] = useState([]);
   const [skillWant, setSkillWant] = useState([]);
+  const [yourToken, setToken] = useState("");
 
-  const handleSubmit = (e) => {
+  const navigate=useNavigate();
+
+  useEffect(() => {
+    const t=localStorage.getItem("access")
+    setToken(t);
+  }, [])
+  
+  const handleSubmit = async(e) => {
     e.preventDefault();
     const payload = {
       bio,
@@ -24,6 +34,22 @@ const ProfileCreate = () => {
       skill_want_names: skillWant.map(skill => skill.value)
     };
     console.log(payload); // send to your backend API
+    console.log(yourToken); // send to your backend API
+     try {
+     const response= await axios.post("http://127.0.0.1:8000/api/createProfile/", payload,{
+  headers: {
+    Authorization: `Bearer ${yourToken}`, // if using JWT
+    "Content-Type": "application/json",
+  }}
+);
+     console.log(response);
+     console.log(response.data);
+      // navigate('/')
+      console.log('done');
+      // Optionally redirect or notify
+    } catch (error) {
+      console.error('Signup failed:', error.response?.data || error.message);
+    }
   };
 
   return (

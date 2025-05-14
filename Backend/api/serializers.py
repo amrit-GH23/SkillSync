@@ -1,5 +1,6 @@
 from .models import Skill,Profile,Chat,Message
 from rest_framework import serializers
+from django.contrib.auth.models import User
 
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
@@ -23,17 +24,24 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields=['id','user','bio','skill_have','skill_have_names','skill_want','skill_want_names']
         read_only_fields=['user']
 
-    def create(self,validated_data):
-        skill_have_names= validated_data.pop('skill_have_names',[])
-        skill_want_names= validated_data.pop('skill_want_names',[])
-        profile= Profile.objects.create(**validated_data)
+    def create(self, validated_data):
+        request = self.context.get('request')
+        print("request",request)
+        print(request.user)
+        user=User.objects.get(username=request.user).id
+        print(user)
+
+        skill_have_names = validated_data.pop('skill_have_names', [])
+        skill_want_names = validated_data.pop('skill_want_names', [])
+
+        profile,_ = Profile.objects.get_or_create(**validated_data)
 
         for name in skill_have_names:
-            skill,_= Skill.objects.get_or_create(name=name)
+            skill, _ = Skill.objects.get_or_create(name=name)
             profile.skill_have.add(skill)
-        
+
         for name in skill_want_names:
             skill, _ = Skill.objects.get_or_create(name=name)
             profile.skill_want.add(skill)
-        
+
         return profile

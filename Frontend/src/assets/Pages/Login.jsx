@@ -19,7 +19,7 @@ const Login = () => {
     try {
       const success = await login(email, password);
       if (success) {
-        navigate("/");
+        navigate("/createProfile");
       } else {
         setError("Invalid email or password.");
       }

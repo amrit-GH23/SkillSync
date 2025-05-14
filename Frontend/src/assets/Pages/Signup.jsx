@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 
@@ -9,16 +9,18 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [cpassword, setCpassword] = useState('');
 
+  const navigate=useNavigate();
+
   const handleSignup = async (e) => {
     e.preventDefault();
 
     try {
-      const res = await axios.post('http://localhost:8000/api/register/', {
+      const res = await axios.post('http://127.0.0.1:8000/api/signup/', {
         email,
         username,
         password,
       });
-
+      navigate('/login')
       console.log('Signup successful!', res.data);
       // Optionally redirect or notify
     } catch (error) {
