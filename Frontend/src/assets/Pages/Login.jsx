@@ -1,20 +1,37 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { useAuth } from '../../context/AuthContext';
+import React, { useState } from "react";
+import {
+  Box,
+  Card,
+  CardContent,
+  Avatar,
+  Typography,
+  TextField,
+  Button,
+  Alert,
+  Stack,
+  InputAdornment,
+  IconButton,
+  Fade,
+} from "@mui/material";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPwd, setShowPwd] = useState(false);
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Fixed typo
-    setError('');
+    e.preventDefault();
+    setError("");
     setLoading(true);
     try {
       const success = await login(email, password);
@@ -30,68 +47,138 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-sky-100 to-blue-200 px-4">
-      <motion.form
-        onSubmit={handleLogin}
-        initial={{ opacity: 0, scale: 0.9, y: -50 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="bg-white shadow-2xl rounded-2xl px-8 pt-8 pb-10 w-full max-w-sm"
-      >
-        <div className="text-center mb-6">
-          <h2 className="text-3xl font-extrabold text-blue-600">SkillSync</h2>
-          <p className="text-gray-500 text-sm">Login to your account</p>
-        </div>
-
-        {error && (
-          <div className="mb-4 text-red-600 text-center font-medium">
-            {error}
-          </div>
-        )}
-
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-          <input
-            id="email"
-            type="email"
-            placeholder="Enter your Email"
-            required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
-          />
-        </div>
-
-        <div className="mb-6">
-          <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-          <input
-            id="password"
-            type="password"
-            placeholder="Enter your Password"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="block w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:ring-2 focus:ring-blue-400 focus:outline-none"
-          />
-        </div>
-
-        <div className="mb-4 text-sm text-center">
-          Don’t have an account?{' '}
-          <Link to="/signup" className="text-blue-500 hover:underline font-medium">
-            Sign up
-          </Link>
-        </div>
-
-        <motion.button
-          whileTap={{ scale: 0.95 }}
-          type="submit"
-          disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-xl transition duration-200"
+    <Box
+      minHeight="100vh"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      sx={{
+        background: "linear-gradient(120deg, #e0e7ff 0%, #f0abfc 100%)",
+        p: 2,
+      }}
+    >
+      <Fade in>
+        <Card
+          sx={{
+            maxWidth: 380,
+            width: "100%",
+            borderRadius: 5,
+            boxShadow: 10,
+            p: { xs: 2, sm: 4 },
+            overflow: "visible",
+            position: "relative",
+          }}
         >
-          {loading ? 'Logging in...' : 'Log In'}
-        </motion.button>
-      </motion.form>
-    </div>
+          <CardContent>
+            <Stack alignItems="center" spacing={2} mb={2}>
+              <Avatar
+                sx={{
+                  bgcolor: "primary.main",
+                  width: 64,
+                  height: 64,
+                  boxShadow: 3,
+                  mt: -7,
+                  mb: 1,
+                  fontSize: 40,
+                }}
+              >
+                <LockOutlinedIcon fontSize="inherit" />
+              </Avatar>
+              <Typography
+                variant="h5"
+                fontWeight={700}
+                color="primary"
+                textAlign="center"
+                letterSpacing={1}
+              >
+                SkillSync
+              </Typography>
+              <Typography variant="body2" color="text.secondary" textAlign="center">
+                Login to your account
+              </Typography>
+            </Stack>
+
+            {error && (
+              <Alert severity="error" sx={{ mb: 2, fontWeight: 500 }}>
+                {error}
+              </Alert>
+            )}
+
+            <form onSubmit={handleLogin}>
+              <Stack spacing={3}>
+                <TextField
+                  label="Email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  required
+                  fullWidth
+                  autoComplete="email"
+                  InputProps={{
+                    sx: { borderRadius: 3, fontSize: "1.05rem" },
+                  }}
+                />
+
+                <TextField
+                  label="Password"
+                  type={showPwd ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  required
+                  fullWidth
+                  autoComplete="current-password"
+                  InputProps={{
+                    sx: { borderRadius: 3, fontSize: "1.05rem" },
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={() => setShowPwd((show) => !show)}
+                          edge="end"
+                        >
+                          {showPwd ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  fullWidth
+                  disabled={loading}
+                  sx={{
+                    borderRadius: 3,
+                    fontWeight: "bold",
+                    fontSize: "1.1rem",
+                    py: 1.5,
+                    boxShadow: 4,
+                    letterSpacing: 0.5,
+                    textTransform: "none",
+                  }}
+                >
+                  {loading ? "Logging in..." : "Log In"}
+                </Button>
+              </Stack>
+            </form>
+
+            <Box mt={4} textAlign="center">
+              <Typography variant="body2" color="text.secondary">
+                Don’t have an account?{" "}
+                <Link to="/signup" style={{ color: "#6366f1", fontWeight: 500 }}>
+                  Sign up
+                </Link>
+              </Typography>
+            </Box>
+          </CardContent>
+        </Card>
+      </Fade>
+    </Box>
   );
 };
 
