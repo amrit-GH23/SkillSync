@@ -1,42 +1,35 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Card,
-  CardContent,
-  Avatar,
-  Typography,
-  TextField,
-  Button,
-  Alert,
-  Stack,
-  InputAdornment,
-  IconButton,
-  Fade,
-} from "@mui/material";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import React, { useState, useEffect } from 'react';
+import { Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle, LogIn } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [showPwd, setShowPwd] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  const navigate = useNavigate();
-  const { login } = useAuth();
+    const navigate= useNavigate();
+
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
+    // Simulate API call
     try {
-      const success = await login(email, password);
-      if (success) {
-        navigate("/createProfile");
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Simulate login validation
+      if (email === "test@example.com" && password === "password") {
+        console.log("Login successful:", { email });
+        // In real app: navigate("/createProfile");
       } else {
         setError("Invalid email or password.");
       }
@@ -46,139 +39,152 @@ const Login = () => {
     setLoading(false);
   };
 
+  if (!mounted) return null;
+
   return (
-    <Box
-      minHeight="100vh"
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      sx={{
-        background: "linear-gradient(120deg, #e0e7ff 0%, #f0abfc 100%)",
-        p: 2,
-      }}
-    >
-      <Fade in>
-        <Card
-          sx={{
-            maxWidth: 380,
-            width: "100%",
-            borderRadius: 5,
-            boxShadow: 10,
-            p: { xs: 2, sm: 4 },
-            overflow: "visible",
-            position: "relative",
-          }}
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-8 px-4 flex items-center justify-center">
+      {/* Animated background elements */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-blue-100/30 to-indigo-200/30 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-violet-100/30 to-purple-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+      </div>
+
+      <div className="relative max-w-md w-full mx-auto">
+        {/* Header */}
+        <div className={`text-center mb-8 transform transition-all duration-700 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl mb-4 shadow-lg transform -translate-y-4">
+            <LogIn className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-2">
+            SkillSync
+          </h1>
+          <p className="text-slate-600">Welcome back! Login to your account</p>
+        </div>
+
+        {/* Form */}
+        <div 
+          className={`bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20 transform transition-all duration-700 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
+          style={{ animationDelay: '200ms' }}
         >
-          <CardContent>
-            <Stack alignItems="center" spacing={2} mb={2}>
-              <Avatar
-                sx={{
-                  bgcolor: "primary.main",
-                  width: 64,
-                  height: 64,
-                  boxShadow: 3,
-                  mt: -7,
-                  mb: 1,
-                  fontSize: 40,
-                }}
-              >
-                <LockOutlinedIcon fontSize="inherit" />
-              </Avatar>
-              <Typography
-                variant="h5"
-                fontWeight={700}
-                color="primary"
-                textAlign="center"
-                letterSpacing={1}
-              >
-                SkillSync
-              </Typography>
-              <Typography variant="body2" color="text.secondary" textAlign="center">
-                Login to your account
-              </Typography>
-            </Stack>
+          {/* Error Message */}
+          {error && (
+            <div className="mb-6 p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl flex items-center gap-3 animate-in slide-in-from-top-2">
+              <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+              <p className="text-red-700 text-sm font-medium">{error}</p>
+            </div>
+          )}
 
-            {error && (
-              <Alert severity="error" sx={{ mb: 2, fontWeight: 500 }}>
-                {error}
-              </Alert>
-            )}
-
-            <form onSubmit={handleLogin}>
-              <Stack spacing={3}>
-                <TextField
-                  label="Email"
+          <div className="space-y-6">
+            {/* Email Field */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
+                <Mail className="w-4 h-4" />
+                Email
+              </label>
+              <div className="relative">
+                <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
                   required
-                  fullWidth
                   autoComplete="email"
-                  InputProps={{
-                    sx: { borderRadius: 3, fontSize: "1.05rem" },
-                  }}
+                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-white/50 backdrop-blur-sm focus:border-indigo-400 focus:outline-none transition-all duration-200 text-slate-700 placeholder-slate-400"
                 />
+              </div>
+            </div>
 
-                <TextField
-                  label="Password"
-                  type={showPwd ? "text" : "password"}
+            {/* Password Field */}
+            <div>
+              <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
+                <Lock className="w-4 h-4" />
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
                   required
-                  fullWidth
                   autoComplete="current-password"
-                  InputProps={{
-                    sx: { borderRadius: 3, fontSize: "1.05rem" },
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={() => setShowPwd((show) => !show)}
-                          edge="end"
-                        >
-                          {showPwd ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
+                  className="w-full px-4 py-3 pr-12 border-2 border-slate-200 rounded-xl bg-white/50 backdrop-blur-sm focus:border-indigo-400 focus:outline-none transition-all duration-200 text-slate-700 placeholder-slate-400"
                 />
-
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  size="large"
-                  fullWidth
-                  disabled={loading}
-                  sx={{
-                    borderRadius: 3,
-                    fontWeight: "bold",
-                    fontSize: "1.1rem",
-                    py: 1.5,
-                    boxShadow: 4,
-                    letterSpacing: 0.5,
-                    textTransform: "none",
-                  }}
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors duration-200"
                 >
-                  {loading ? "Logging in..." : "Log In"}
-                </Button>
-              </Stack>
-            </form>
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
 
-            <Box mt={4} textAlign="center">
-              <Typography variant="body2" color="text.secondary">
-                Don’t have an account?{" "}
-                <Link to="/signup" style={{ color: "#6366f1", fontWeight: 500 }}>
+            {/* Forgot Password Link */}
+            <div className="flex justify-end">
+              <button 
+                type="button"
+                className="text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors duration-200 hover:underline"
+              >
+                Forgot your password?
+              </button>
+            </div>
+
+            {/* Submit Button */}
+            <button
+              onClick={handleLogin}
+              disabled={loading || !email || !password}
+              className={`group relative w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 hover:from-indigo-600 hover:via-purple-600 hover:to-indigo-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ${
+                loading ? 'animate-pulse' : ''
+              }`}
+            >
+              <div className="flex items-center justify-center gap-3">
+                {loading ? (
+                  <>
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span>Logging in...</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-lg">Log In</span>
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
+                  </>
+                )}
+              </div>
+            </button>
+
+            {/* Sign Up Link */}
+            <div className="text-center pt-4 border-t border-slate-200">
+              <p className="text-slate-600">
+                Don't have an account?{' '}
+                <button 
+                  type="button"
+                  onClick={(e)=>{
+                    navigate("/signup")}}
+                  className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors duration-200 hover:underline"
+                >
                   Sign up
-                </Link>
-              </Typography>
-            </Box>
-          </CardContent>
-        </Card>
-      </Fade>
-    </Box>
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Features */}
+        <div className={`mt-6 grid grid-cols-3 gap-4 transform transition-all duration-700 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`} style={{ animationDelay: '600ms' }}>
+          {[
+            { icon: LogIn, text: 'Secure login' },
+            { icon: Lock, text: 'Protected data' },
+            { icon: ArrowRight, text: 'Quick access' }
+          ].map((feature, index) => (
+            <div key={index} className="text-center p-4 bg-white/50 backdrop-blur-sm rounded-xl border border-white/20">
+              <feature.icon className="w-8 h-8 text-indigo-500 mx-auto mb-2" />
+              <p className="text-xs text-slate-600 font-medium">{feature.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 
