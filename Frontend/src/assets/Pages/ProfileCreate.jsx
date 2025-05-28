@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronRight, User, Plus, X, Sparkles, Check } from 'lucide-react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const skillsArray = [
   "Python", "Java", "C", "C++", "C#", "JavaScript", "TypeScript", "HTML", "CSS", "SQL", "MongoDB", "PostgreSQL", "MySQL", "SQLite", "Django", "Flask", "FastAPI", "Spring Boot", "Node.js", "Express.js", "React", "Vue.js", "Angular", "Next.js", "Tailwind CSS", "Bootstrap", "Redux", "GraphQL", "REST API", "Git", "Docker", "Kubernetes", "Linux", "AWS", "Azure", "GCP", "Firebase", "Machine Learning", "Deep Learning", "Data Science", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-learn", "TensorFlow", "PyTorch", "OpenCV", "Natural Language Processing", "Computer Vision", "Web Scraping", "Automation", "Cybersecurity", "Ethical Hacking", "DevOps", "System Design", "Agile", "Scrum", "CI/CD", "Unit Testing", "Object-Oriented Programming", "Data Structures", "Algorithms", "Competitive Programming", "Problem Solving", "Embedded Systems", "Microcontrollers", "IoT", "Arduino", "Raspberry Pi", "Verilog", "VHDL", "FPGA Design", "Computer Architecture", "Operating Systems", "Networking", "Software Engineering", "Computer Graphics", "3D Modeling", "Blender", "Unity", "Unreal Engine", "Game Development", "Figma", "UI/UX Design", "Adobe Photoshop", "Adobe Illustrator", "Video Editing", "CAD", "SolidWorks", "MATLAB", "Simulink", "LaTeX", "Technical Writing", "Research Writing", "Public Speaking", "Team Leadership", "Project Management", "Product Design", "Design Thinking", "Entrepreneurship"
@@ -107,30 +109,45 @@ const ProfileCreate = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [access, setToken] = useState("");
+  const navigate= useNavigate()
 
   useEffect(() => {
+   const t= localStorage.getItem("access");
+   setToken(t);
     setMounted(true);
+
+    console.log(access)
+
   }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-
     const payload = {
       bio,
       skill_have_names: skillHave,
       skill_want_names: skillWant
     };
-
-    console.log('Profile data:', payload);
-    setLoading(false);
-    setSuccess(true);
-
-    // Reset success state after 3 seconds
-    setTimeout(() => setSuccess(false), 3000);
+     console.log(access)
+  try{
+    const response=await axios.post("http://127.0.0.1:8000/api/createProfile/",payload,
+      {
+         headers: {
+           Authorization: `Bearer ${access}`
+         }
+       }
+     )
+     console.log('Profile data:', payload);
+     console.log(response.data)
+     navigate("/")
+  }
+  catch(error){
+       console.log(error)
+  }
+   setLoading(false);
+     setSuccess(true);
   };
 
   if (!mounted) return null;

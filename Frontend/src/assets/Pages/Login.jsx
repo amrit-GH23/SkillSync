@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Mail, Lock, Eye, EyeOff, ArrowRight, AlertCircle, LogIn } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(""); // assuming email is the username field
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-    const navigate= useNavigate();
-
+  const navigate = useNavigate();
+  const { login } = useAuth();
 
   useEffect(() => {
     setMounted(true);
@@ -22,20 +23,13 @@ const Login = () => {
     setError("");
     setLoading(true);
 
-    // Simulate API call
-    try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Simulate login validation
-      if (email === "test@example.com" && password === "password") {
-        console.log("Login successful:", { email });
-        // In real app: navigate("/createProfile");
-      } else {
-        setError("Invalid email or password.");
-      }
-    } catch (err) {
-      setError("An error occurred. Please try again.");
+    const success = await login(email, password);
+    if (success) {
+      navigate("/createProfile"); // redirect after login
+    } else {
+      setError("Invalid email or password.");
     }
+
     setLoading(false);
   };
 
@@ -43,7 +37,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-8 px-4 flex items-center justify-center">
-      {/* Animated background elements */}
+      {/* Background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-1/2 -right-1/2 w-full h-full bg-gradient-to-br from-blue-100/30 to-indigo-200/30 rounded-full blur-3xl animate-pulse"></div>
         <div className="absolute -bottom-1/2 -left-1/2 w-full h-full bg-gradient-to-tr from-violet-100/30 to-purple-200/30 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
@@ -66,7 +60,7 @@ const Login = () => {
           className={`bg-white/70 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20 transform transition-all duration-700 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
           style={{ animationDelay: '200ms' }}
         >
-          {/* Error Message */}
+          {/* Error */}
           {error && (
             <div className="mb-6 p-4 bg-gradient-to-r from-red-50 to-pink-50 border border-red-200 rounded-xl flex items-center gap-3 animate-in slide-in-from-top-2">
               <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
@@ -75,26 +69,24 @@ const Login = () => {
           )}
 
           <div className="space-y-6">
-            {/* Email Field */}
+            {/* Email */}
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
                 <Mail className="w-4 h-4" />
                 Email
               </label>
-              <div className="relative">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
-                  required
-                  autoComplete="email"
-                  className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-white/50 backdrop-blur-sm focus:border-indigo-400 focus:outline-none transition-all duration-200 text-slate-700 placeholder-slate-400"
-                />
-              </div>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+                autoComplete="email"
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-xl bg-white/50 backdrop-blur-sm focus:border-indigo-400 focus:outline-none transition-all duration-200 text-slate-700 placeholder-slate-400"
+              />
             </div>
 
-            {/* Password Field */}
+            {/* Password */}
             <div>
               <label className="flex items-center gap-2 text-sm font-semibold text-slate-700 mb-2">
                 <Lock className="w-4 h-4" />
@@ -120,17 +112,14 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Forgot Password Link */}
+            {/* Forgot Password */}
             <div className="flex justify-end">
-              <button 
-                type="button"
-                className="text-sm text-indigo-600 hover:text-indigo-700 font-medium transition-colors duration-200 hover:underline"
-              >
+              <button type="button" className="text-sm text-indigo-600 hover:text-indigo-700 font-medium hover:underline transition-colors duration-200">
                 Forgot your password?
               </button>
             </div>
 
-            {/* Submit Button */}
+            {/* Submit */}
             <button
               onClick={handleLogin}
               disabled={loading || !email || !password}
@@ -153,14 +142,13 @@ const Login = () => {
               </div>
             </button>
 
-            {/* Sign Up Link */}
+            {/* Sign Up */}
             <div className="text-center pt-4 border-t border-slate-200">
               <p className="text-slate-600">
                 Don't have an account?{' '}
                 <button 
                   type="button"
-                  onClick={(e)=>{
-                    navigate("/signup")}}
+                  onClick={() => navigate("/signup")}
                   className="text-indigo-600 hover:text-indigo-700 font-semibold transition-colors duration-200 hover:underline"
                 >
                   Sign up

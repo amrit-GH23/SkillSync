@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'
 import { User, Mail, Lock, Eye, EyeOff, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -42,23 +43,21 @@ const Signup = () => {
       setError("Password must be at least 6 characters long.");
       return;
     }
+    const payload={
+       email,
+       password,
+       username
+    }
 
     setLoading(true);
 
     // Simulate API call
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Simulate successful signup
-      const mockResponse = {
-        access: "mock_access_token",
-        refresh: "mock_refresh_token"
-      };
-
-      console.log("Signup successful:", { email, username });
-      // In real app: localStorage.setItem("access", mockResponse.access);
-      // navigate("/createProfile");
-      
+      const response=  await axios.post("http://127.0.0.1:8000/api/signup/",payload)
+       console.log(response.data)
+       localStorage.setItem("access",response.data.access)
+       localStorage.setItem("refresh",response.data.refresh)
+       navigate("/createProfile")
     } catch (error) {
       setError("Signup failed. Please try again.");
     }
@@ -72,9 +71,6 @@ const Signup = () => {
     return 'bg-green-400';
   };
 
-   const navi2login=()=>{
-        navigate("/login")
-   }
 
   const getPasswordStrengthText = () => {
     if (passwordStrength <= 1) return 'Weak';

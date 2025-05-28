@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { User, MessageCircle, Eye, Users, Search, Filter, Sparkles, Menu, X } from 'lucide-react';
 import NavBar from '../Components/Navbar';
 import ProfileCard from '../Components/ProfileCard';
+import axios from 'axios';
 
 
 // NavBar Component
@@ -11,69 +12,23 @@ const Home = () => {
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
+  const [token,setToken]=useState("");
+
 
   useEffect(() => {
     setMounted(true);
     
-    // Simulate API call with mock data
+    const t=localStorage.getItem("access")
+    setToken(t);
     const fetchProfiles = async () => {
       try {
-        // Simulate loading delay
-        await new Promise(resolve => setTimeout(resolve, 1500));
-        
-        // Mock profile data
-        const mockProfiles = [
-          {
-            id: 1,
-            username: "Alex Chen",
-            bio: "Full-stack developer passionate about creating innovative web applications. I love working with React, Node.js, and exploring new technologies.",
-            skillHave: ["React", "Node.js", "Python", "MongoDB", "JavaScript"],
-            skillWant: ["Machine Learning", "Docker", "AWS"],
-            imageUrl: "https://cdn-icons-png.flaticon.com/512/847/847969.png"
-          },
-          {
-            id: 2,
-            username: "Sarah Johnson",
-            bio: "UI/UX designer with 5 years of experience. I specialize in creating beautiful, user-centered digital experiences.",
-            skillHave: ["Figma", "Adobe XD", "Photoshop", "UI Design", "Prototyping"],
-            skillWant: ["3D Design", "Animation", "Blender"],
-            imageUrl: "https://cdn-icons-png.flaticon.com/512/847/847969.png"
-          },
-          {
-            id: 3,
-            username: "Mike Rodriguez",
-            bio: "Data scientist and machine learning engineer. I enjoy solving complex problems with data-driven solutions.",
-            skillHave: ["Python", "TensorFlow", "Pandas", "SQL", "Machine Learning"],
-            skillWant: ["Deep Learning", "Computer Vision", "PyTorch"],
-            imageUrl: "https://cdn-icons-png.flaticon.com/512/847/847969.png"
-          },
-          {
-            id: 4,
-            username: "Emily Davis",
-            bio: "Mobile app developer focused on creating seamless user experiences. I work with both iOS and Android platforms.",
-            skillHave: ["Swift", "Kotlin", "Flutter", "React Native", "Firebase"],
-            skillWant: ["SwiftUI", "Jetpack Compose", "GraphQL"],
-            imageUrl: "https://cdn-icons-png.flaticon.com/512/847/847969.png"
-          },
-          {
-            id: 5,
-            username: "David Kim",
-            bio: "DevOps engineer with expertise in cloud infrastructure and automation. I help teams deploy and scale applications efficiently.",
-            skillHave: ["AWS", "Docker", "Kubernetes", "Linux", "CI/CD"],
-            skillWant: ["Terraform", "Azure", "Monitoring"],
-            imageUrl: "https://cdn-icons-png.flaticon.com/512/847/847969.png"
-          },
-          {
-            id: 6,
-            username: "Lisa Wang",
-            bio: "Product manager with a background in software engineering. I bridge the gap between technical teams and business objectives.",
-            skillHave: ["Product Management", "Agile", "Scrum", "Analytics", "Strategy"],
-            skillWant: ["Data Analysis", "User Research", "A/B Testing"],
-            imageUrl: "https://cdn-icons-png.flaticon.com/512/847/847969.png"
-          }
-        ];
-        
-        setProfiles(mockProfiles);
+      const response=await axios.get("http://127.0.0.1:8000/api/getProfile/",{
+         headers: {
+           Authorization: `Bearer ${token}`
+         }
+       })        
+        console.log(response.data) 
+        setProfiles(response.data)   
       } catch (error) {
         console.error('Fetching profiles failed:', error);
       } finally {
@@ -82,7 +37,7 @@ const Home = () => {
     };
 
     fetchProfiles();
-  }, []);
+  }, [token]);
 
   if (!mounted) return null;
 
