@@ -7,11 +7,6 @@ from .serializers import SkillSerializer, ProfileSerializer
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.views import (
-    TokenObtainPairView,
-    TokenRefreshView,
-)
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -46,6 +41,7 @@ def signup(request):
 
 
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def createProfile(request):
     print("Payload received:", request.data,request.user)  # 👈 add this
     serializer = ProfileSerializer(data=request.data, context={'request': request})
@@ -57,18 +53,37 @@ def createProfile(request):
 
 
 def find_matches_for(profile):
-    # Get skill sets
-    my_have = profile.skill_have.all()
-    my_want = profile.skill_want.all()
+    from collections import defaultdict
 
-    # Find other profiles where:
-    # They have what I want AND want what I have
-    matches = Profile.objects.exclude(id=profile.id).filter(
-        skill_have__in=my_want,
-        skill_want__in=my_have
-    ).distinct()
+    my_have = set(profile.skill_have.all())
+    my_want = set(profile.skill_want.all())
 
-    return matches
+    other_profiles = Profile.objects.exclude(id=profile.id).prefetch_related('skill_have', 'skill_want')
+
+    scored_matches = []
+
+    for other in other_profiles:
+        their_have = set(other.skill_have.all())
+        their_want = set(other.skill_want.all())
+
+        # Skills they have that you want
+        overlap_have = their_have & my_want
+
+        # Skills they want that you have
+        overlap_want = their_want & my_have
+
+        # Scoring logic: you can adjust weights here
+        score = len(overlap_have) + len(overlap_want)
+
+        if score > 0:
+            scored_matches.append((score, other))
+
+    # Sort by score descending
+    scored_matches.sort(key=lambda x: x[0], reverse=True)
+
+    # Optional: return just the profiles or profiles with score
+    return [match[1] for match in scored_matches]
+
 
 @permission_classes([IsAuthenticated])
 @api_view(['GET'])
