@@ -55,63 +55,6 @@ const ProfileCard = ({ imageUrl, bio, username, skillHave, skillWant, onViewProf
         </p>
       </div>
 
-      {/* Skills Section */}
-      <div className="space-y-2 sm:space-y-3 mb-4 sm:mb-6">
-        {/* Skills I Have */}
-        {skillHave && skillHave.length > 0 && (
-          <div>
-            <h4 className="text-xs font-semibold text-emerald-600 mb-1.5 sm:mb-2 flex items-center gap-1">
-              <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-              <span className="hidden sm:inline">Skills I Have</span>
-              <span className="sm:hidden">Skills</span>
-            </h4>
-            <div className="flex flex-wrap gap-1">
-              {skillHave.slice(0, maxVisibleSkills).map((skill, idx) => (
-                <span
-                  key={idx}
-                  className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gradient-to-r from-emerald-100 to-emerald-50 text-emerald-700 rounded-full text-xs font-medium border border-emerald-200 truncate max-w-[80px] sm:max-w-none"
-                  title={skill}
-                >
-                  {skill}
-                </span>
-              ))}
-              {skillHave.length > maxVisibleSkills && (
-                <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-medium">
-                  +{skillHave.length - maxVisibleSkills}
-                </span>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Skills I Want */}
-        {skillWant && skillWant.length > 0 && (
-          <div>
-            <h4 className="text-xs font-semibold text-blue-600 mb-1.5 sm:mb-2 flex items-center gap-1">
-              <Search className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-              <span className="hidden sm:inline">Want to Learn</span>
-              <span className="sm:hidden">Learning</span>
-            </h4>
-            <div className="flex flex-wrap gap-1">
-              {skillWant.slice(0, maxVisibleSkills).map((skill, idx) => (
-                <span
-                  key={idx}
-                  className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gradient-to-r from-blue-100 to-blue-50 text-blue-700 rounded-full text-xs font-medium border border-blue-200 truncate max-w-[80px] sm:max-w-none"
-                  title={skill}
-                >
-                  {skill}
-                </span>
-              ))}
-              {skillWant.length > maxVisibleSkills && (
-                <span className="px-1.5 sm:px-2 py-0.5 sm:py-1 bg-slate-100 text-slate-600 rounded-full text-xs font-medium">
-                  +{skillWant.length - maxVisibleSkills}
-                </span>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-
       {/* Action Buttons */}
       <div className="flex flex-col xs:flex-row gap-2">
         <button

@@ -141,13 +141,13 @@ const ProfileCreate = () => {
      )
      console.log('Profile data:', payload);
      console.log(response.data)
+      setSuccess(true);
      navigate("/")
   }
   catch(error){
        console.log(error)
   }
    setLoading(false);
-     setSuccess(true);
   };
 
   if (!mounted) return null;

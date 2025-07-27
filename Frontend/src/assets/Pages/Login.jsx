@@ -25,7 +25,7 @@ const Login = () => {
 
     const success = await login(email, password);
     if (success) {
-      navigate("/createProfile"); // redirect after login
+      navigate("/"); 
     } else {
       setError("Invalid email or password.");
     }
