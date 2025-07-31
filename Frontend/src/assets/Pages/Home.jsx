@@ -3,6 +3,7 @@ import { User, MessageCircle, Eye, Users, Search, Filter, Sparkles, Menu, X } fr
 import NavBar from '../Components/Navbar';
 import ProfileCard from '../Components/ProfileCard';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 
 // NavBar Component
@@ -13,6 +14,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [token,setToken]=useState("");
+  const navigate= useNavigate();
 
 
   useEffect(() => {
@@ -85,7 +87,7 @@ const Home = () => {
                   bio={profile.bio}
                   skillHave={profile.skillHave}
                   skillWant={profile.skillWant}
-                  onViewProfile={() => console.log(`Viewing profile ${profile.id}`)}
+                  onViewProfile={() => navigate(`/viewProfile/${profile.id}`)}
                   onChat={() => console.log(`Chatting with profile ${profile.id}`)}
                   index={index}
                 />
