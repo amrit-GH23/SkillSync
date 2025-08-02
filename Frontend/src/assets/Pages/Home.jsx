@@ -12,36 +12,41 @@ import { useNavigate } from 'react-router-dom';
 const Home = () => {
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [mounted, setMounted] = useState(false);
   const [token,setToken]=useState("");
   const navigate= useNavigate();
 
 
-  useEffect(() => {
-    setMounted(true);
-    
-    const t=localStorage.getItem("access")
-    setToken(t);
-    const fetchProfiles = async () => {
-      try {
-      const response=await axios.get("http://127.0.0.1:8000/api/getProfile/",{
-         headers: {
-           Authorization: `Bearer ${token}`
-         }
-       })        
-        console.log(response.data) 
-        setProfiles(response.data)   
-      } catch (error) {
-        console.error('Fetching profiles failed:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+useEffect(() => {
+  const t = localStorage.getItem("access");
+  if (!t) {
+    navigate("/login");
+    return;
+  }
+  setToken(t);
+}, []);
 
-    fetchProfiles();
-  }, [token]);
+useEffect(() => {
+  if (!token) return; // Don't fetch if token is still empty
 
-  if (!mounted) return null;
+  const fetchProfiles = async () => {
+    try {
+      const response = await axios.get("http://127.0.0.1:8000/api/getProfile/", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log(response.data);
+      setProfiles(response.data);
+    } catch (error) {
+      console.error('Fetching profiles failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchProfiles();
+}, [token]);
+
 
   return (
     <div>
@@ -56,7 +61,7 @@ const Home = () => {
       
       <div className="relative">
         {/* Header Section */}
-        <div className={`text-center py-6 sm:py-8 lg:py-12 px-3 sm:px-4 transform transition-all duration-700 ${mounted ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
+        <div className={`text-center py-6 sm:py-8 lg:py-12 px-3 sm:px-4 transform transition-all duration-700 `}>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-3 sm:mb-4 leading-tight">
             Discover Amazing People
           </h1>
