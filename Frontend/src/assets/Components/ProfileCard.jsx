@@ -34,7 +34,7 @@ const ProfileCard = ({ imageUrl, bio, username, skillHave, skillWant, onViewProf
       <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
         <div className="relative flex-shrink-0">
           <img
-            src={imageUrl}
+            src="/userss.png"
             alt="Profile"
             className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full object-cover border-2 sm:border-3 border-white shadow-lg"
           />
@@ -42,9 +42,9 @@ const ProfileCard = ({ imageUrl, bio, username, skillHave, skillWant, onViewProf
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="text-sm sm:text-base lg:text-lg font-bold text-slate-800 group-hover:text-indigo-600 transition-colors duration-200 truncate">
-            {username || 'Anonymous User'}
+            {username.first_name || 'Anonymous User'}
           </h3>
-          <p className="text-xs sm:text-sm text-slate-500">Active now</p>
+          <p className="text-xs sm:text-sm text-slate-500">Connect now</p>
         </div>
       </div>
 
@@ -69,7 +69,7 @@ const ProfileCard = ({ imageUrl, bio, username, skillHave, skillWant, onViewProf
           className="flex-1 xs:flex-initial flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-white/80 hover:bg-white border-2 border-slate-200 hover:border-indigo-300 text-slate-700 hover:text-indigo-600 font-medium rounded-lg sm:rounded-xl transition-all duration-200 transform hover:scale-[1.02] shadow-sm text-sm"
         >
           <MessageCircle className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-          <span className="hidden xs:inline">Chat</span>
+          <span className="xs:inline">Chat</span>
         </button>
       </div>
     </div>

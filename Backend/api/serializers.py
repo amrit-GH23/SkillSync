@@ -2,6 +2,11 @@ from .models import Skill,Profile,Chat,Message
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'first_name', 'email'] 
+
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
         model = Skill
@@ -9,6 +14,7 @@ class SkillSerializer(serializers.ModelSerializer):
         read_only_fields=['id']
 
 class ProfileSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
     skill_have_names=serializers.ListField(
         child=serializers.CharField(), write_only=True
         )

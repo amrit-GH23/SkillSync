@@ -1,6 +1,7 @@
 // AuthContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
+import { toast } from 'react-toastify';
 
 const AuthContext = createContext();
 
@@ -29,7 +30,7 @@ export const AuthProvider = ({ children }) => {
       const expiry = decoded.exp * 1000;
       const timeout = expiry - Date.now() - 60000; // 1 min before expiry
       console.log("Token will refresh in:", timeout / 1000, "seconds");
-
+      console.log(user)
       if (timeout > 0) {
         setTimeout(() => refreshAccess(refresh), timeout);
       } else {
@@ -106,6 +107,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
+    toast.success("Logged out successfully");
   };
 
   return (

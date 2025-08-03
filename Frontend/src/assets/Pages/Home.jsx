@@ -5,9 +5,7 @@ import ProfileCard from '../Components/ProfileCard';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-
 // NavBar Component
-
 // Main Home Component
 const Home = () => {
   const [profiles, setProfiles] = useState([]);
@@ -46,7 +44,8 @@ useEffect(() => {
 
   fetchProfiles();
 }, [token]);
-
+  
+  console.log(profiles);
 
   return (
     <div>
@@ -87,8 +86,8 @@ useEffect(() => {
               {profiles.map((profile, index) => (
                 <ProfileCard
                   key={profile.id}
-                  imageUrl={profile.imageUrl}
-                  username={profile.username}
+                  imageUrl="/user.png"                   
+                  username={profile.user}
                   bio={profile.bio}
                   skillHave={profile.skillHave}
                   skillWant={profile.skillWant}
