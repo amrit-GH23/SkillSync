@@ -23,7 +23,7 @@ function App() {
         <Route path="/createProfile" element={<ProfileCreate/>} />
         <Route path="/" element={<Home/>} />
         <Route path="/viewProfile/:id" element={<ViewProfile/>} />
-        <Route path="/chat" element={<Chat/>} />
+        <Route path="/chat/:id" element={<Chat/>} />
       </Routes>
     </Router>
   );

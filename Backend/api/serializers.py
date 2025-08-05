@@ -51,3 +51,27 @@ class ProfileSerializer(serializers.ModelSerializer):
             profile.skill_want.add(skill)
 
         return profile
+
+class MessageSerializer(serializers.ModelSerializer):
+    sender_name = serializers.SerializerMethodField()
+    receiver_name = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Message
+        fields = [
+            'id',
+            'chatRoom',
+            'sender',
+            'receiver',
+            'message',
+            'time',
+            'sender_name',
+            'receiver_name',
+        ]
+        read_only_fields = ['time', 'sender_name', 'receiver_name']
+
+    def get_sender_name(self, obj):
+        return obj.sender.first_name or obj.sender.username
+
+    def get_receiver_name(self, obj):
+        return obj.receiver.first_name or obj.receiver.username

@@ -92,7 +92,7 @@ useEffect(() => {
                   skillHave={profile.skillHave}
                   skillWant={profile.skillWant}
                   onViewProfile={() => navigate(`/viewProfile/${profile.id}`)}
-                  onChat={() => console.log(`Chatting with profile ${profile.id}`)}
+                  onChat={() => navigate(`/chat/${profile.user.id}`)}
                   index={index}
                 />
               ))}

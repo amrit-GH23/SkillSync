@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response  
 from rest_framework import status             
-from .models import Skill, Profile
-from .serializers import SkillSerializer, ProfileSerializer
+from .models import Skill, Profile, Chat, Message
+from .serializers import SkillSerializer, ProfileSerializer, MessageSerializer
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -12,6 +12,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.db.models import Q
+
 
 @api_view(['POST'])
 def signup(request):
@@ -108,3 +110,61 @@ def getProfile(request, id):
 
     serializer = ProfileSerializer(profile)
     return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def chat(request):
+    user1 = request.user
+    user2_id = request.data.get('userId')
+    print(user2_id)
+
+    if not user2_id:
+        return Response({"error": "userId is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    if str(user1.id) == str(user2_id):
+        return Response({"error": "Cannot create chat with yourself"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        user2 = User.objects.get(id=user2_id)
+
+        # ✅ Check using ID fields
+        chat = Chat.objects.filter(
+            (Q(person1=user1.id) & Q(person2=user2.id)) |
+            (Q(person1=user2.id) & Q(person2=user1.id))
+        ).first()
+          
+        print(chat)
+
+        if not chat:
+            chat = Chat.objects.create(person1=user1, person2=user2)
+
+        return Response({
+            "chat_id": chat.id,
+            "person1": chat.person1.username,
+            "person2": chat.person2.username
+        }, status=status.HTTP_200_OK)
+
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    
+@permission_classes([IsAuthenticated])
+@api_view(['GET'])
+def getMessages(request, id):
+    messages = Message.objects.filter(chatRoom=id)
+    if not messages.exists():
+        return Response({"error": "No messages found"}, status=404)
+    
+    serializer = MessageSerializer(messages, many=True)
+    return Response(serializer.data)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def sendMessage(request):
+    serializer = MessageSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(sender=request.user)
+        return Response({"success": True, "data": serializer.data}, status=status.HTTP_201_CREATED)
+    
+    print("Errors:", serializer.errors)
+    return Response({"success": False, "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)

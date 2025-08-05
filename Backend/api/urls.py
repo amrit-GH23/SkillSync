@@ -12,4 +12,7 @@ urlpatterns = [
     path('signup/', views.signup, name='signup'),
     path('getProfile/', views.get, name='profile'),
     path('getProfile/<int:id>/', views.getProfile, name='profile'),
+    path('sendMessage/', views.sendMessage, name='sendMessage'),
+    path('getMessages/<int:id>/', views.getMessages, name='getMessages'),
+    path('chat/', views.chat, name='chat'),
 ]

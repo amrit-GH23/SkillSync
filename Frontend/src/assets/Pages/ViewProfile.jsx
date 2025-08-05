@@ -120,7 +120,7 @@ useEffect(() => {
 
           {/* Submit Button */}
           <button
-            onClick={handleSubmit}
+            onClick={() => navigate(`/chat/${profile.id}`)}
             disabled={loading}
             className={`group relative w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 hover:from-indigo-600 hover:via-purple-600 hover:to-indigo-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ${
               loading ? 'animate-pulse' : ''
