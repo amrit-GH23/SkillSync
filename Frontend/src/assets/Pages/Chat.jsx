@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const Chat = () => {
   const [chatId, setChatId] = useState(null);
@@ -29,7 +30,7 @@ const Chat = () => {
     const onChat = async () => {
       try {
         const response = await axios.post(
-          "http://127.0.0.1:8000/api/chat/",
+          `${API_BASE_URL}/api/chat/`,
           { userId: id },
           {
             headers: {
@@ -59,7 +60,7 @@ const Chat = () => {
     const fetchMessages = async () => {
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/getMessages/${chatId}/`,
+          `${API_BASE_URL}/api/getMessages/${chatId}/`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -96,7 +97,7 @@ const Chat = () => {
 
   try {
     await axios.post(
-      `http://127.0.0.1:8000/api/sendMessage/`,
+      `${API_BASE_URL}/api/sendMessage/`,
       {
         message: newMessage,
         chatRoom: chatId,

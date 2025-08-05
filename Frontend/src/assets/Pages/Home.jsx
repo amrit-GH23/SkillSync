@@ -4,6 +4,8 @@ import NavBar from '../Components/Navbar';
 import ProfileCard from '../Components/ProfileCard';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
 
 // NavBar Component
 // Main Home Component
@@ -28,7 +30,7 @@ useEffect(() => {
 
   const fetchProfiles = async () => {
     try {
-      const response = await axios.get("http://127.0.0.1:8000/api/getProfile/", {
+      const response = await axios.get(`${API_BASE_URL}/api/getProfile/`, {
         headers: {
           Authorization: `Bearer ${token}`
         }

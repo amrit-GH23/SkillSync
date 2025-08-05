@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ChevronRight, User, Plus, X, Sparkles, Check } from 'lucide-react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
 
 const skillsArray = [
   "Python", "Java", "C", "C++", "C#", "JavaScript", "TypeScript", "HTML", "CSS", "SQL", "MongoDB", "PostgreSQL", "MySQL", "SQLite", "Django", "Flask", "FastAPI", "Spring Boot", "Node.js", "Express.js", "React", "Vue.js", "Angular", "Next.js", "Tailwind CSS", "Bootstrap", "Redux", "GraphQL", "REST API", "Git", "Docker", "Kubernetes", "Linux", "AWS", "Azure", "GCP", "Firebase", "Machine Learning", "Deep Learning", "Data Science", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-learn", "TensorFlow", "PyTorch", "OpenCV", "Natural Language Processing", "Computer Vision", "Web Scraping", "Automation", "Cybersecurity", "Ethical Hacking", "DevOps", "System Design", "Agile", "Scrum", "CI/CD", "Unit Testing", "Object-Oriented Programming", "Data Structures", "Algorithms", "Competitive Programming", "Problem Solving", "Embedded Systems", "Microcontrollers", "IoT", "Arduino", "Raspberry Pi", "Verilog", "VHDL", "FPGA Design", "Computer Architecture", "Operating Systems", "Networking", "Software Engineering", "Computer Graphics", "3D Modeling", "Blender", "Unity", "Unreal Engine", "Game Development", "Figma", "UI/UX Design", "Adobe Photoshop", "Adobe Illustrator", "Video Editing", "CAD", "SolidWorks", "MATLAB", "Simulink", "LaTeX", "Technical Writing", "Research Writing", "Public Speaking", "Team Leadership", "Project Management", "Product Design", "Design Thinking", "Entrepreneurship"
@@ -132,7 +134,7 @@ const ProfileCreate = () => {
     };
      console.log(access)
   try{
-    const response=await axios.post("http://127.0.0.1:8000/api/createProfile/",payload,
+    const response=await axios.post(`${API_BASE_URL}/api/createProfile/`,payload,
       {
          headers: {
            Authorization: `Bearer ${access}`

@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { ChevronRight, User, Plus, X, Sparkles, Check } from 'lucide-react';
 import axios from 'axios';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
 
 const ViewProfile = () => {
   const [bio, setBio] = useState('');
@@ -24,7 +26,7 @@ useEffect(() => {
 
   const fetchProfile = async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/getProfile/${id}/`, {
+      const response = await axios.get(`${API_BASE_URL}/api/getProfile/${id}/`, {
         headers: {
           Authorization: `Bearer ${t}`
         }

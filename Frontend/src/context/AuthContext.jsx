@@ -2,6 +2,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { toast } from 'react-toastify';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 const AuthContext = createContext();
 
@@ -44,7 +45,7 @@ export const AuthProvider = ({ children }) => {
 
   const refreshAccess = async (refreshToken) => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/token/refresh/", {
+      const res = await fetch(`${API_BASE_URL}/api/token/refresh/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ refresh: refreshToken }),
@@ -75,7 +76,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (username, password) => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/token/", {
+      const res = await fetch(`${API_BASE_URL}/api/token/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),

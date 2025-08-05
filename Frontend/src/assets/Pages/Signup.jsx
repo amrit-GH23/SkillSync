@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import { User, Mail, Lock, Eye, EyeOff, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
+
 
 const Signup = () => {
   const [email, setEmail] = useState("");
@@ -53,7 +55,7 @@ const Signup = () => {
 
     // Simulate API call
     try {
-      const response=  await axios.post("http://127.0.0.1:8000/api/signup/",payload)
+      const response=  await axios.post(`${API_BASE_URL}/api/signup/`,payload)
        console.log(response.data)
        localStorage.setItem("access",response.data.access)
        localStorage.setItem("refresh",response.data.refresh)
