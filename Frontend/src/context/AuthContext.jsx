@@ -4,6 +4,9 @@ import { jwtDecode } from "jwt-decode";
 import { toast } from 'react-toastify';
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
+console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
+
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -73,6 +76,8 @@ export const AuthProvider = ({ children }) => {
       logout();
     }
   };
+
+console.log('Calling:', `${API_BASE_URL}/api/token/refresh/`);
 
   const login = async (username, password) => {
     try {
