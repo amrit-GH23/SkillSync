@@ -33,7 +33,7 @@ useEffect(() => {
       });
        const data = response.data;
     setProfile(data);
-    setSkillHave(data.skill_have || []);  // Use keys that match your backend
+    setSkillHave(data.skill_have || []);  
     setSkillWant(data.skill_want || []);
     setMounted(true);
     } catch (error) {

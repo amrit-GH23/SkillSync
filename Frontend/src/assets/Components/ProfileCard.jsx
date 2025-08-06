@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MessageCircle, Eye, Search, Sparkles } from 'lucide-react';
 
-// Custom hook for screen width
 const useScreenWidth = () => {
   const [width, setWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 1024);
 

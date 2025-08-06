@@ -118,9 +118,6 @@ const ProfileCreate = () => {
    const t= localStorage.getItem("access");
    setToken(t);
     setMounted(true);
-
-    console.log(access)
-
   }, []);
 
   const handleSubmit = async (e) => {
@@ -132,7 +129,6 @@ const ProfileCreate = () => {
       skill_have_names: skillHave,
       skill_want_names: skillWant
     };
-     console.log(access)
   try{
     const response=await axios.post(`${API_BASE_URL}/api/createProfile/`,payload,
       {
@@ -141,8 +137,6 @@ const ProfileCreate = () => {
          }
        }
      )
-     console.log('Profile data:', payload);
-     console.log(response.data)
       setSuccess(true);
      navigate("/")
   }

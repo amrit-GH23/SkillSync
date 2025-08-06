@@ -6,9 +6,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
-
-// NavBar Component
-// Main Home Component
 const Home = () => {
   const [profiles, setProfiles] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,7 +23,7 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
-  if (!token) return; // Don't fetch if token is still empty
+  if (!token) return;
 
   const fetchProfiles = async () => {
     try {
@@ -35,7 +32,6 @@ useEffect(() => {
           Authorization: `Bearer ${token}`
         }
       });
-      console.log(response.data);
       setProfiles(response.data);
     } catch (error) {
       console.error('Fetching profiles failed:', error);
@@ -47,8 +43,6 @@ useEffect(() => {
   fetchProfiles();
 }, [token]);
   
-  console.log(profiles);
-
   return (
     <div>
       <NavBar/>

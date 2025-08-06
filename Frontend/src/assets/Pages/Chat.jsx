@@ -19,7 +19,6 @@ const Chat = () => {
     return null;
   }
   
-  // Fetch/Create chat when component mounts
   useEffect(() => {
     const token = localStorage.getItem("access");
     if (!token) {
@@ -39,7 +38,6 @@ const Chat = () => {
           }
         );
         const chatID = response.data.chat_id;
-        console.log("Chat ID:", chatID);
         setChatId(chatID);
       } catch (error) {
         console.error('Error creating chat:', error);
@@ -79,12 +77,10 @@ const Chat = () => {
     return () => clearInterval(interval);
   }, [chatId]);
 
-  // Scroll to bottom when messages update
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
   
-  // Send new message
   const sendMessage = async () => {
     if (!newMessage.trim()) return;
     const token = localStorage.getItem("access");

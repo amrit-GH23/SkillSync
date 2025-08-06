@@ -23,7 +23,6 @@ const Signup = () => {
   }, []);
 
   useEffect(() => {
-    // Calculate password strength
     let strength = 0;
     if (password.length >= 8) strength++;
     if (/[A-Z]/.test(password)) strength++;
@@ -53,10 +52,8 @@ const Signup = () => {
 
     setLoading(true);
 
-    // Simulate API call
     try {
       const response=  await axios.post(`${API_BASE_URL}/api/signup/`,payload)
-       console.log(response.data)
        localStorage.setItem("access",response.data.access)
        localStorage.setItem("refresh",response.data.refresh)
        navigate("/createProfile")
