@@ -18,9 +18,6 @@ export const AuthProvider = ({ children }) => {
       return null;
     }
   });
-
-  localStorage.setItem("user", JSON.stringify(user));
-
   useEffect(() => {
     if (access && refresh) {
       scheduleRefresh(access);
@@ -73,6 +70,29 @@ export const AuthProvider = ({ children }) => {
       logout();
     }
   };
+
+  useEffect(() => {
+    const getprofile = async () => {
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/getProfile/${user.user_id}/`, {
+          headers: {
+            Authorization: `Bearer ${access}`,
+          },
+        });
+        if (!res.ok) {
+          throw new Error("Failed to fetch profile");
+        }
+        const data = await res.json();
+        localStorage.setItem("profileId", data.id);
+      } catch (err) {
+        console.error("Error fetching profile:", err);
+      }
+    };
+
+    if (access) {
+      getprofile();
+    }
+  }, [user]);
 
   const login = async (username, password) => {
     try {
