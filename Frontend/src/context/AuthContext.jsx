@@ -74,7 +74,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const getprofile = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/api/getProfile/${user.user_id}/`, {
+        const res = await fetch(`${API_BASE_URL}/api/getProfile2/${user.user_id}/`, {
           headers: {
             Authorization: `Bearer ${access}`,
           },
@@ -128,6 +128,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem("access");
     localStorage.removeItem("refresh");
+    localStorage.removeItem("profileId");
     toast.success("Logged out successfully");
   };
 

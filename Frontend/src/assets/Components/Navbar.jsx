@@ -12,12 +12,11 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-
 const NavBar = () => {
     
   const navigate = useNavigate();
   const {logout} = useAuth(); 
-
+  const id = localStorage.getItem("profileId") || {};
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
@@ -25,7 +24,7 @@ const NavBar = () => {
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 xl:px-8">
         <div className="flex justify-between items-center h-14 sm:h-16">
           {/* Logo */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 cursor-pointer">
             <img src="/favicon.png" alt="logo" width={50} height={50} />
             <h1 className="text-lg sm:text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent"
              onClick={()=> navigate('/')}>
@@ -36,16 +35,16 @@ const NavBar = () => {
           {/* Desktop Navigation */}
           <div className="hidden sm:flex items-center gap-3 lg:gap-4">
             <div className="relative group">
-              <button className="p-2 text-slate-600 hover:text-indigo-600 transition-colors duration-200 rounded-lg hover:bg-white/50">
+              <button className="p-2 text-slate-600 hover:text-indigo-600 transition-colors duration-200 rounded-lg hover:bg-white/50 cursor-pointer">
                 <User className="w-4 h-4 lg:w-5 lg:h-5" />
               </button>
-              <span className="absolute left-1/2 -translate-x-1/2 mt-2 px-2 py-1 text-xs text-white bg-gray-800 rounded shadow-md opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap z-10"
-                onClick={() => navigate('/Myprofile')}>
+              <span className="absolute left-1/2 -translate-x-1/2 mt-2 px-2 py-1 text-xs text-white bg-gray-800 rounded shadow-md opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap z-10 cursor-pointer"
+                onClick={() => navigate(`/Myprofile/${id}`)}>
                 My Profile
               </span>
             </div>
 
-            <div className="relative group">
+            <div className="relative group cursor-pointer">
               <button className="p-2 text-slate-600 hover:text-indigo-600 transition-colors duration-200 rounded-lg hover:bg-white/50">
                 <LogOut className="w-4 h-4 lg:w-5 lg:h-5" />
               </button>

@@ -11,6 +11,7 @@ import ViewProfile from './assets/Pages/ViewProfile';
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import Chat from './assets/Pages/Chat';
+import Myprofile from './assets/Pages/MyProfile';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/signup" element={<Signup/>} />
         <Route path="/createProfile" element={<ProfileCreate/>} />
         <Route path="/" element={<Home/>} />
+        <Route path="/myProfile/:id" element={<Myprofile/>} />
         <Route path="/viewProfile/:id" element={<ViewProfile/>} />
         <Route path="/chat/:id" element={<Chat/>} />
       </Routes>

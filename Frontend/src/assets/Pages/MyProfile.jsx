@@ -14,7 +14,7 @@ const Myprofile = () => {
   const [profile, setProfile]=useState(null);
   const navigate= useNavigate();
   
-    const { id } = useParams();
+   const  id  = localStorage.getItem("profileId") || {};
 useEffect(() => {
   const t = localStorage.getItem("access");
   if (!t) {
@@ -50,7 +50,7 @@ useEffect(() => {
           <div className="flex justify-center items-center py-12 sm:py-20 px-3">
             <div className="flex flex-col sm:flex-row items-center gap-3">
               <div className="w-6 h-6 sm:w-8 sm:h-8 border-4 border-indigo-200 border-t-indigo-500 rounded-full animate-spin"></div>
-              <span className="text-slate-600 font-medium text-sm sm:text-base text-center">Loading amazing profiles...</span>
+              <span className="text-slate-600 font-medium text-sm sm:text-base text-center">Loading Your profile...</span>
             </div>
           </div>
         )}
@@ -120,8 +120,8 @@ useEffect(() => {
 
 
           {/* Submit Button */}
-          <button
-            onClick={handleSubmit}
+          {/* <button
+            // onClick={handleSubmit}
             disabled={loading}
             className={`group relative w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-600 hover:from-indigo-600 hover:via-purple-600 hover:to-indigo-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none ${
               loading ? 'animate-pulse' : ''
@@ -140,7 +140,7 @@ useEffect(() => {
                 </>
               )}
             </div>
-          </button>          
+          </button>           */}
          </div>
         </form>
       </div>
