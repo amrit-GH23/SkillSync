@@ -19,6 +19,8 @@ export const AuthProvider = ({ children }) => {
     }
   });
 
+  localStorage.setItem("user", JSON.stringify(user));
+
   useEffect(() => {
     if (access && refresh) {
       scheduleRefresh(access);
