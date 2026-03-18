@@ -100,11 +100,22 @@ def get(request):
     serializer = ProfileSerializer(matches, many=True)
     return Response(serializer.data)
 
-# @permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated])
 @api_view(['GET'])
 def getProfile(request, id):
     try:
         profile = Profile.objects.get(id=id)
+    except Profile.DoesNotExist:
+        return Response({"error": "Profile not found"}, status=404)
+
+    serializer = ProfileSerializer(profile)
+    return Response(serializer.data)
+
+@permission_classes([IsAuthenticated])
+@api_view(['GET'])
+def getProfile2(request, id):
+    try:
+        profile = Profile.objects.get(user=id)
     except Profile.DoesNotExist:
         return Response({"error": "Profile not found"}, status=404)
 
