@@ -8,7 +8,7 @@ const Myprofile = () => {
   const [bio, setBio] = useState('');
   const [skillHave, setSkillHave] = useState([]);
   const [skillWant, setSkillWant] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [access, setToken] = useState("");
   const [profile, setProfile]=useState(null);
@@ -36,6 +36,8 @@ useEffect(() => {
     setMounted(true);
     } catch (error) {
       console.error('Error fetching profile:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -43,14 +45,23 @@ useEffect(() => {
 }, [id]); 
 
 
-
+ 
   if (!profile) {
     return <div className="text-center mt-8 text-red-500">No profile data found.</div>;
   }
 
-
-
   return (
+    <div>
+     {loading && (
+          <div className="flex justify-center items-center py-12 sm:py-20 px-3">
+            <div className="flex flex-col sm:flex-row items-center gap-3">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 border-4 border-indigo-200 border-t-indigo-500 rounded-full animate-spin"></div>
+              <span className="text-slate-600 font-medium text-sm sm:text-base text-center">Loading amazing profiles...</span>
+            </div>
+          </div>
+        )}
+      
+    {!loading && (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 py-8 px-4">
       {/* Animated background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -140,6 +151,8 @@ useEffect(() => {
         </form>
       </div>
     </div>
+            )}
+      </div>
   );
 };
 
