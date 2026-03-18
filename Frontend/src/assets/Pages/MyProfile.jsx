@@ -44,12 +44,6 @@ useEffect(() => {
   fetchProfile();
 }, [id]); 
 
-
- 
-  if (!profile) {
-    return <div className="text-center mt-8 text-red-500">No profile data found.</div>;
-  }
-
   return (
     <div>
      {loading && (
@@ -152,6 +146,11 @@ useEffect(() => {
       </div>
     </div>
             )}
+     
+     {!loading && !profile && (
+      <div className="text-center mt-8 text-red-500">No profile data found.</div>
+     )}
+
       </div>
   );
 };
